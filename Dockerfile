@@ -8,15 +8,16 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 RUN echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
+RUN sed -i "s!LogLevel warn!LogLevel alert!g" /etc/apache2/apache2.conf
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
-RUN apt-get update && apt-get install -y libmemcached11 libmemcachedutil2 build-essential libmemcached-dev libz-dev
-RUN pecl install memcached-3.2.0
-RUN echo extension=memcached.so >> /usr/local/etc/php/conf.d/memcached.ini
 
 RUN apt-get update && \
-    apt-get install -y default-mysql-client unzip vim cron openssl
+    apt-get install -y default-mysql-client unzip vim cron openssl locales-all tmux openssh-server libmemcached11 libmemcachedutil2 build-essential libmemcached-dev libz-dev
+
+RUN pecl install memcached-3.2.0
+RUN echo extension=memcached.so >> /usr/local/etc/php/conf.d/memcached.ini
 
 RUN if [ "$APP_ENV" = "development" ] ; then install-php-extensions \
     intl mysqli gd zip pdo_mysql soap bcmath sockets scoutapm xdebug; else install-php-extensions \
@@ -25,13 +26,6 @@ RUN if [ "$APP_ENV" = "development" ] ; then install-php-extensions \
 RUN if [ "$APP_ENV" = "development" ] ; then echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.idekey=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
-
-RUN apt-get update && \
-  apt install -y locales-all && \
-  apt install -y tmux && \
-  apt install -y openssh-server && \
-  service ssh start
-EXPOSE 22/tcp
 
 RUN a2enmod rewrite
 
