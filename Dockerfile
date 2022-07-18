@@ -22,7 +22,7 @@ RUN if [ "$APP_ENV" = "development" ] ; then install-php-extensions \
 
 RUN if [ "$APP_ENV" = "development" ] ; then echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.idekey=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    echo "xdebug.idekey=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
 
 RUN apt-get update && \
   apt install -y locales-all && \
