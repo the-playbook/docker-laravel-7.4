@@ -8,7 +8,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 RUN echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
-RUN sed -i "s!LogLevel warn!LogLevel alert!g" /etc/apache2/apache2.conf
+RUN sed -i "s!LogLevel warn!LogLevel error!g" /etc/apache2/apache2.conf
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 
