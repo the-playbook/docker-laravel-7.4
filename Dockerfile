@@ -14,7 +14,7 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 
 RUN apt-get update && \
-    apt-get install -y default-mysql-client unzip vim cron supervisor openssl locales-all tmux openssh-server libmemcached11 libmemcachedutil2 build-essential libmemcached-dev libz-dev
+    apt-get install -y default-mysql-client unzip vim cron supervisor openssl locales-all tmux openssh-server libmemcached11 libmemcachedutil2 build-essential libmemcached-dev libz-dev redis-tools
 
 RUN pecl install memcached-3.2.0
 RUN echo extension=memcached.so >> /usr/local/etc/php/conf.d/memcached.ini
